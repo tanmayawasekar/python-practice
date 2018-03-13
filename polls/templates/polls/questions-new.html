@@ -1,0 +1,27 @@
+<h1>"Add new Question"</h1>
+
+<form action="{% url 'polls:question_add' %}" method="post">
+    {% csrf_token %} 
+    <label>
+        Question Text
+        <input type="text" name="question_text" id = 1>
+    </label>
+    <label>
+        Published Date
+        <input type="date" name="pub_date" id = 12>
+    </label>
+    <label>
+        Choice
+        <input type="text" name="choice1">
+    </label>
+    <label>
+        Choice
+        <input type="text" name="choice2">
+    </label>
+    <label>
+        Choice
+        <input type="text" name="choice3">
+    </label>
+    </label>
+    <input type="submit" value="question_add">
+</form>

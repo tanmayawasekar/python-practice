@@ -1,0 +1,11 @@
+<h1>"Add new Choice For the Question"</h1>
+<h1>{{question_id}}</h1>
+
+<form action="{% url 'polls:choice_add' question_id.id %}" method="post">
+    {% csrf_token %}
+    <label>
+        Choice Text
+        <input type="text" name="choice_text" id=1>
+    </label>
+    <input type="submit" value="choice_add">
+</form>

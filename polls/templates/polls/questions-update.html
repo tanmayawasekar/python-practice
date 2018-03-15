@@ -1,0 +1,26 @@
+<h1>"Update new Question"</h1>
+
+<form action="{% url 'polls:question_add' %}" method="post">
+    {% csrf_token %}
+    <label>
+        Question Text
+        <input type="text" name="question_text" id=1 value = {{question.question_text}}>
+    </label>
+    <label>
+        Published Date
+        <input type="date" name="pub_date" id = 132  value = {{question.pub_date}}>
+    </label>
+    <label>
+        Choice 1
+        <input type="text" name="choice1" id = 1432 value = {{question.choice}}>
+    </label>
+    <label>
+        Choice 2
+        <input type="text" name="choice2" id = 142 value = {{question.choice}}>
+    </label>
+    <label>
+        Choice 3
+        <input type="text" name="choice3" id = 1442 value = {{question.choice}}>
+    </label>
+    <input type="submit" value="question_update">
+</form>

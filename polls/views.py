@@ -7,6 +7,9 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
+from timeit import timeit, time
+from django import forms
+from forms import newQuestion as form_new_question
 
 from .models import Choice, Question
 import datetime
@@ -54,16 +57,33 @@ def new_question(request):
     return render(request, 'polls/questions-new.html')
 
 
+def update_question(request, question_id):
+    question = Question.objects.get(id=question_id)
+    choice = Question.objects.choice_set.all()
+    return render(request, 'polls/questions-update.html',
+    context = {"question":question})
+
+
 def add_question(request):
-    question_text = request.POST['question_text']
-    pub_date = request.POST['pub_date']
-    choice_text = request.POST['choice']
-    newQuestion = Question(
-        question_text = question_text,
-        pub_date=datetime.datetime.strptime(pub_date, "%Y-%m-%d").date()
-    )
-    newQuestion.save()
-    # newChoice = Choice(question=newQuestion, choice_text = choice_text)
-    # newChoice.save()
-    newQuestion.choice_set.create(choice_text = choice_text)
-    return HttpResponseRedirect(reverse('polls:question_new'))
+    form = form_new_question(request.POST)
+    if form.is_valid():
+        newQuestion = Question(
+            question_text = form.cleaned_data['question_text'],
+            pub_date=form.cleaned_data['pub_date']
+        )
+        newQuestion.save()
+        newQuestion.choice_set.create(choice_text=form.cleaned_data['choice1'])
+        newQuestion.choice_set.create(choice_text=form.cleaned_data['choice2'])
+        newQuestion.choice_set.create(choice_text=form.cleaned_data['choice3'])
+        return HttpResponseRedirect(reverse('polls:question_new'))
+    else:
+        print(form)
+        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
+        form = form_new_question(initial={'pub_date': proposed_renewal_date, })
+
+        return HttpResponseRedirect(reverse('polls:question_new'))
+
+
+def delete_question(request, question_id):
+    a = Question.objects.filter(id=question_id).delete()
+    return HttpResponseRedirect(reverse('polls:index'))

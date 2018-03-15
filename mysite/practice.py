@@ -1,3 +1,5 @@
+from timeit import timeit, time, repeat
+
 # # my_name = "tanmay"
 # # my_second_name = "nanu"
 # # my_third_name = "tanu"
@@ -109,7 +111,87 @@
 # for value in range(10, 0, -2):
     # print(value)
 
-name = "Tanmay"
-age = 10.212    
+# name = "Tanmay"
+# age = 10.212    
 
-print("My name is   %s and age is %d") % (name, age)
+# print("My name is   %s and age is %d") % (name, age)
+# def getSquare(x):
+    # return x**2
+
+
+# print("with range",repeat(stmt="'-'.join(str(n) for n in range(100))",
+# setup="from practice import getSquare", number=100000, repeat=10))
+
+# print("with xrange",repeat(stmt="'-'.join(str(n) for n in xrange(100))",
+# setup="from practice import getSquare", number=100000, repeat=10))
+
+####################################################################
+# from functools import wraps
+
+# def check_negetive(fn):
+
+#     @wraps(fn)
+#     def inner_function(*args, **xargs):
+#         positive_list_posi = [True if x > 0 else False for x in args]
+#         positive_list_named = [True if value > 0 else False for index,
+#                                value in xargs.items()]
+
+#         if len(positive_list_posi) and not all(positive_list_posi):
+#             raise ValueError('Arguments must be non negetive')
+        
+#         if len(positive_list_named) and not all(positive_list_named):
+#             raise ValueError('Arguments must be non negetive')
+#         return fn(*args, **xargs)
+
+#     return inner_function
+
+
+# def print_in_out_params(fn):
+
+#     @wraps(fn)
+#     def inner_function(*args, **argsx):
+#         print(args, argsx)
+#         result = fn(*args, **argsx)
+#         print(result)
+#         return result
+        
+#     return inner_function    
+
+# @check_negetive
+# @print_in_out_params
+# def square(x, y):
+#     return x * 2 + y * 2
+
+# square(x=2,y=3)
+
+# print square.__name__
+
+
+class example_static_methods(object):
+    _initial_roll_no = 10
+
+    @classmethod
+    def get_next_roll(cls):
+        cls._initial_roll_no += 1
+        return cls._initial_roll_no
+
+
+    def __init__(self):
+        example_static_methods._initial_roll_no+=1
+        self._initial_roll_no = self.get_next_roll()
+
+    @property
+    def roll_no(self):
+        return self._initial_roll_no
+
+    @roll_no.setter
+    def roll_no(self, value):
+        if value < 0:
+            raise ValueError("Non Negetive values not allowed")
+        self._initial_roll_no = value
+
+a = example_static_methods()
+example_static_methods.get_next_roll()
+
+a.roll_no = -2
+print(a.roll_no)

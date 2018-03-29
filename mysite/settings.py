@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'authenticate.apps.AuthenticateConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,9 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
 ]
 
+
 MIDDLEWARE = [
+    # 'mysite.print_request.print_request',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -119,3 +124,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/polls/'
+
+LOGOUT_REDIRECT_URL = '/auth/login'
+
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'official.coverfox@gmail.com'
+SERVER_EMAIL = 'tanmay.awasekar@coverfoxmail.com'
+EMAIL_HOST = 'smtp.tanmay.awasekar@coverfoxmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'tanmay.awasekar@coverfoxmail.com'
+EMAIL_HOST_PASSWORD = '7825tanmay'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+LOGIN_EXEMPT_URLs = (
+    r'auth/change-password/'
+    r'auth/login/'
+)

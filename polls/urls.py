@@ -15,4 +15,6 @@ urlpatterns = [
         views.delete_question, name='delete'),
     url(r'^update/(?P<question_id>[0-9]+)$',
         views.update_question, name='update'),
+    # url(r'^topics/new/$',
+    #     views.update_question, name='update'),
 ]

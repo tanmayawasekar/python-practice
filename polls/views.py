@@ -7,19 +7,28 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
+from django.views import View
 from timeit import timeit, time
 from django import forms
 from forms import newQuestion as form_new_question
 
-from .models import Choice, Question
+from forms import NewQuestionTopic as FormNewQuestionTopic
+
+from .models import Choice, Question, Topic
 import datetime
+
+from explain_helper import QuerySet as Q
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
-        """Return the last five published questions."""
+
+        search_text = self.request.GET.get('search', None)
+        print(Question.objects.search_text_from_model(search_text, 'question_text'))
+        if search_text:
+            return Question.objects.search_text_from_model(search_text, 'question_text').order_by('-pub_date')
         return Question.objects.order_by('-pub_date')
 
 
@@ -50,8 +59,8 @@ def vote(request, question_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
-
+        
+        
 
 def new_question(request):
     return render(request, 'polls/questions-new.html')
@@ -59,6 +68,8 @@ def new_question(request):
 
 def update_question(request, question_id):
     question = Question.objects.get(id=question_id)
+    a = Question.objects.get(id=question_id).explain()
+    print(a)
     choice = Question.objects.choice_set.all()
     return render(request, 'polls/questions-update.html',
     context = {"question":question})
@@ -87,3 +98,32 @@ def add_question(request):
 def delete_question(request, question_id):
     a = Question.objects.filter(id=question_id).delete()
     return HttpResponseRedirect(reverse('polls:index'))
+
+
+def add_question_topic(request):
+    render()
+
+def new_question_topic(request):
+    form = FormNewQuestionTopic(request.POST)
+    if form.is_valid():
+        t = Topic(
+            topic_name = form.cleaned_data.get('topic_name', None),
+            topic_type = form.cleaned_data.get('topic_type', None),
+        )
+        t.save()
+        return HttpResponseRedirect(reverse('polls:questions_new'))
+    else:
+        return render()
+
+
+class SearchListView(generic.base.View):
+
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
+
+    
+    def get_queryset(self):
+        search_text = self.request.GET.get('search_text', None)
+        print(search_text)
+        if search_text:
+            return Question.objects.filter(question_text=search_text)

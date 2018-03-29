@@ -8,6 +8,19 @@
     </li>
     {% endfor %}
 </ul>
+<a href="{% url 'authenticate:logout' %}">Logout</a>
+<a href="{% url 'polls:question_add' %}">Add New Question</a>
+{% comment %} <a href="{% url 'polls:topics_add' %}">Add New Question Topics</a> {% endcomment %}
+
 {% else %}
 <p>No polls are available.</p>
+<a href="{% url 'authenticate:logout' %}">Logout</a>
+<a href="{% url 'polls:question_add' %}">Add New Question</a>
+{% comment %} <a href="{% url 'polls:topics_add' %}">Add New Question Topics</a> {% endcomment %}
 {% endif %}
+<a href="{% url 'authenticate:password_change' %}">Change Password</a>
+
+<form action="{% url 'polls:index' %}" method="get">
+    <input type="text" name="search" id="search">
+    <input type="submit" value="Search">
+</form>
